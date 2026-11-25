@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>내 손안의 포스트잇</title>
+  <meta name="description" content="인터넷 없이 쓰는 간단한 포스트잇 메모 앱">
+  <meta name="theme-color" content="#FFD54F" id="themeMeta">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="포스트잇">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <noscript>이 앱은 JavaScript가 켜져 있어야 작동합니다.</noscript>
+
+  <div id="app">
+    <header class="topbar">
+      <div class="title-row">
+        <h1>📝 내 손안의 포스트잇</h1>
+        <div class="top-actions">
+          <button id="themeBtn" class="icon-btn" type="button" aria-label="다크모드 전환">🌙</button>
+          <button id="menuBtn" class="icon-btn" type="button" aria-label="메뉴 열기">⋮</button>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input id="searchInput" type="search" placeholder="메모 검색" autocomplete="off" enterkeyhint="search" aria-label="메모 검색">
+        <button id="clearSearch" class="clear-btn" type="button" aria-label="검색어 지우기" hidden>✕</button>
+      </div>
+
+      <div class="toolbar">
+        <span id="countText" class="count-text">전체 0개</span>
+        <select id="sortSelect" aria-label="정렬 방식">
+          <option value="new">최신순</option>
+          <option value="old">오래된 순</option>
+        </select>
+      </div>
+    </header>
+
+    <main>
+      <div id="notesGrid" class="grid"></div>
+      <div id="emptyState" class="empty" hidden>
+        <div class="empty-emoji" aria-hidden="true">🗒️</div>
+        <p id="emptyText"></p>
+      </div>
+    </main>
+
+    <button id="fab" class="fab" type="button" aria-label="새 메모 쓰기">＋</button>
+  </div>
+
+  <!-- 메모 작성/수정 화면 -->
+  <div id="editor" class="editor" hidden role="dialog" aria-modal="true" aria-label="메모 작성">
+    <div id="editorSheet" class="editor-sheet" data-color="yellow">
+      <div class="editor-top">
+        <button id="closeEditor" class="icon-btn flat" type="button" aria-label="닫기">←</button>
+        <span id="editorDate" class="editor-date"></span>
+        <button id="pinBtn" class="icon-btn flat" type="button" aria-label="상단에 고정" aria-pressed="false">📌</button>
+      </div>
+
+      <input id="titleInput" class="title-input" type="text" maxlength="60" placeholder="제목" autocomplete="off" aria-label="메모 제목">
+      <textarea id="contentInput" class="content-input" placeholder="여기에 메모를 적어 보세요" aria-label="메모 내용"></textarea>
+
+      <div id="colorPicker" class="colors" role="group" aria-label="메모 색상">
+        <button type="button" class="color-dot" data-color="yellow" aria-label="노란색"></button>
+        <button type="button" class="color-dot" data-color="pink" aria-label="분홍색"></button>
+        <button type="button" class="color-dot" data-color="blue" aria-label="하늘색"></button>
+        <button type="button" class="color-dot" data-color="green" aria-label="연두색"></button>
+        <button type="button" class="color-dot" data-color="purple" aria-label="보라색"></button>
+      </div>
+
+      <div class="editor-actions">
+        <button id="copyBtn" class="soft-btn" type="button">📋 복사</button>
+        <button id="shareBtn" class="soft-btn" type="button">📤 공유</button>
+        <button id="deleteBtn" class="soft-btn" type="button">🗑️ 삭제</button>
+      </div>
+      <button id="saveBtn" class="save-btn" type="button">저장</button>
+    </div>
+  </div>
+
+  <!-- 메뉴 -->
+  <div id="menu" class="overlay" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="메뉴">
+      <h2>메뉴</h2>
+      <button id="menuBackup" class="menu-item" type="button">💾 백업 파일 저장 (JSON)</button>
+      <button id="menuRestore" class="menu-item" type="button">📂 백업 파일에서 복원</button>
+      <button id="menuTheme" class="menu-item" type="button">🌙 다크모드로 바꾸기</button>
+      <button id="menuInstall" class="menu-item" type="button" hidden>📲 홈 화면에 앱 설치</button>
+      <p id="backupInfo" class="backup-info"></p>
+      <button id="menuClose" class="menu-close" type="button">닫기</button>
+    </div>
+  </div>
+  <input id="restoreFile" type="file" accept=".json,application/json" hidden>
+
+  <!-- 확인 창 -->
+  <div id="dialog" class="overlay center" hidden>
+    <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="dialogMsg">
+      <h3 id="dialogTitle"></h3>
+      <p id="dialogMsg"></p>
+      <div id="dialogBtns" class="dialog-btns"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
